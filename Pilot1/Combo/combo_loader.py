@@ -957,13 +957,31 @@ def run():
         cv_partition=args.cv_partition,
         cv=args.cv,
     )
-    test_loader(loader)
+    # test_loader(loader)
     # test_generator(loader)
 
     # train_gen = ComboDataGenerator(loader, batch_size=args.batch_size).flow()
     # val_gen = ComboDataGenerator(
     #     loader, partition="val", batch_size=args.batch_size
     # ).flow()
+
+    x_train_list, y_train, x_test_list, y_test, _, _ = loader.load_data()
+    print("x_train shapes:")
+    for x in x_train_list:
+        print(x.shape)
+    print("y_train shape:", y_train.shape)
+
+    print("x_val shapes:")
+    for x in x_test_list:
+        print(x.shape)
+    print("y_val shape:", y_test.shape)
+
+    data_train = {"x_train": x_train_list, "y_train": y_train}
+
+    data_test = {"x_test_list": x_test_list, "y_test": y_test}
+
+    np.save("training_combo.npy", data_train)
+    np.save("testing_combo.npy", data_test)
 
 
 if __name__ == "__main__":
