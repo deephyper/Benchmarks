@@ -39,10 +39,6 @@ def load_data():
         X_valid.append(Xi[curr:])
     y_train, y_valid = y[:curr], y[curr:]
 
-    # X_train, X_valid, y_train, y_valid = train_test_split(
-    #     X, y, test_size=0.2, random_state=42
-    # )
-
     print("Train")
     print("Input")
     for Xi in X_train:
