@@ -23,9 +23,25 @@ def load_data():
 
     X, y = load_data_npz_gz()
 
-    X_train, X_valid, y_train, y_valid = train_test_split(
-        X, y, test_size=0.2, random_state=42
-    )
+    for Xi in X:
+        assert Xi.shape[0] == y.shape[0]
+
+    # Train/Validation split
+    rs = np.random.RandomState(42)
+    valid_size = 0.2
+    indexes = np.arange(0,y.shape[0])
+    rs.shuffle(indexes)
+    curr = int(valid_size*y.shape[0])
+    indexes_train, indexes_valid = indexes[:curr], indexes[curr:]
+    X_train, X_valid = [], []
+    for Xi in X:
+        X_train.append(Xi[:curr])
+        X_valid.append(Xi[curr:])
+    y_train, y_valid = y[:curr], y[curr:]
+
+    # X_train, X_valid, y_train, y_valid = train_test_split(
+    #     X, y, test_size=0.2, random_state=42
+    # )
 
     print("Train")
     print("Input")
