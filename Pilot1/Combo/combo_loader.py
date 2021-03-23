@@ -977,9 +977,9 @@ def run():
         print(x.shape)
     print("y_val shape:", y_test.shape)
 
-    data_train = {"x_train": x_train_list, "y_train": y_train}
+    data_train = {"X": x_train_list, "y": y_train}
 
-    data_test = {"x_test_list": x_test_list, "y_test": y_test}
+    data_test = {"X": x_test_list, "y": y_test}
 
     f = gzip.GzipFile("training_combo.npy.gz", "w")
     np.save(file=f, arr=data_train)

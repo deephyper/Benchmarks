@@ -1,25 +1,50 @@
 import gzip
 import numpy as np
 
+from sklearn.model_selection import train_test_split
+
+
+def load_data_npz_gz(test=False):
+
+    if test:
+        fname = "testing_combo.npy.gz"
+    else:
+        fname = "training_combo.npy.gz"
+
+    with gzip.GzipFile(fname, "rb") as f:
+        data = np.load(f, allow_pickle=True).item()
+
+    X, y = data["X"], data["y_train"]
+
+    return X, y
+
 
 def load_data():
-    # data_train = {"x_train": x_train_list, "y_train": y_train}
 
-    # data_test = {"x_test_list": x_test_list, "y_test": y_test}
+    X, y = load_data_npz_gz()
 
-    with gzip.GzipFile("training_combo.npy.gz", "r") as f:
-        data_train = np.load(file=f)
+    X_train, X_valid, y_train, y_valid = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
 
-    X_train, y_train = data_train["x_train"], data_train["y_train"]
+    print("Train")
+    print("Input")
+    for Xi in X_train:
+        print(np.shape(Xi))
 
-    # with gzip.GzipFile("testing_combo.npy.gz", "w") as f:
-    # data_test = np.load(file=f)
-
-    print("Inputs:")
-    for arr in X_train:
-        print(np.shape(arr))
-
-    print("Outputs:")
+    print("Output")
     print(np.shape(y_train))
 
-    return X_train, y_train
+    print("Valid")
+    print("Input")
+    for Xi in X_valid:
+        print(np.shape(Xi))
+
+    print("Output")
+    print(np.shape(y_train))
+
+    return (X_train, y_train), (X_valid, y_valid)
+
+
+if __name__ == "__main__":
+    load_data_npz_gz()
