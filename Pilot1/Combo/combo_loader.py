@@ -8,6 +8,7 @@ import logging
 import os
 import random
 import threading
+import gzip
 
 import numpy as np
 import pandas as pd
@@ -980,8 +981,13 @@ def run():
 
     data_test = {"x_test_list": x_test_list, "y_test": y_test}
 
-    np.save("training_combo.npy", data_train)
-    np.save("testing_combo.npy", data_test)
+    f = gzip.GzipFile("training_combo.npy.gz", "w")
+    np.save(file=f, arr=data_train)
+    f.close()
+
+    f = gzip.GzipFile("testing_combo.npy.gz", "w")
+    np.save(file=f, arr=data_test)
+    f.close()
 
 
 if __name__ == "__main__":
