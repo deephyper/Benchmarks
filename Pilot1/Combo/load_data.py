@@ -31,7 +31,7 @@ def load_data():
     valid_size = 0.2
     indexes = np.arange(0,y.shape[0])
     rs.shuffle(indexes)
-    curr = int(valid_size*y.shape[0])
+    curr = int((1-valid_size)*y.shape[0])
     indexes_train, indexes_valid = indexes[:curr], indexes[curr:]
     X_train, X_valid = [], []
     for Xi in X:
