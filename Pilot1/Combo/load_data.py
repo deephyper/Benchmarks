@@ -14,7 +14,7 @@ def load_data_npz_gz(test=False):
     with gzip.GzipFile(fname, "rb") as f:
         data = np.load(f, allow_pickle=True).item()
 
-    X, y = data["X"], data["y_train"]
+    X, y = data["X"], data["y"]
 
     return X, y
 
