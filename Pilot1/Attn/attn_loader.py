@@ -246,6 +246,7 @@ def run(params):
     h5f.create_dataset('Y_val', data=Y_val)
     h5f.create_dataset('X_test', data=X_test)
     h5f.create_dataset('Y_test', data=Y_test)
+    h5f.close()
 
     # PS=X_train.shape[1]
     # model = build_attention_model(params, PS)
