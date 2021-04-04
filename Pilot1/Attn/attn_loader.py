@@ -8,6 +8,7 @@ import sys
 import gzip
 import argparse
 import sklearn
+import h5py
 
 import tensorflow as tf
 
@@ -226,28 +227,25 @@ def run(params):
     d_class_weights = dict(enumerate(class_weights))
 
     print('X_train shape:', X_train.shape)
+    print('X_val shape:', X_val.shape)
     print('X_test shape:', X_test.shape)
 
     print('Y_train shape:', Y_train.shape)
+    print('Y_val shape:', Y_val.shape)
     print('Y_test shape:', Y_test.shape)
 
     # save the data
-    data_train = {"X": X_train, "y": Y_train}
-    data_val = {"X": X_val, "y": Y_val}
-    data_test = {"X": X_test, "y": Y_test}
+    # data_train = {"X": X_train, "y": Y_train}
+    # data_val = {"X": X_val, "y": Y_val}
+    # data_test = {"X": X_test, "y": Y_test}
 
-    f = gzip.GzipFile("training_attn.npy.gz", "w")
-    np.save(file=f, arr=data_train)
-    f.close()
-
-    f = gzip.GzipFile("validation_attn.npy.gz", "w")
-    np.save(file=f, arr=data_val)
-    f.close()
-
-
-    f = gzip.GzipFile("testing_attn.npy.gz", "w")
-    np.save(file=f, arr=data_test)
-    f.close()
+    h5f = h5py.File('training_attn.h5', 'w')
+    h5f.create_dataset('X_train', data=X_train)
+    h5f.create_dataset('Y_train', data=Y_train)
+    h5f.create_dataset('X_val', data=X_val)
+    h5f.create_dataset('Y_val', data=Y_val)
+    h5f.create_dataset('X_test', data=X_test)
+    h5f.create_dataset('Y_test', data=Y_test)
 
     # PS=X_train.shape[1]
     # model = build_attention_model(params, PS)
