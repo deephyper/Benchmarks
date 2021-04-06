@@ -426,11 +426,9 @@ def evaluate_model(
         )
     f.close()
 
-    false_pos_rate, true_pos_rate, thresholds = roc_curve(np.argmax(Y_test, axis=1), np.argmax(Y_predict, axis=1))
-    # print(thresholds)
-    # print("fpr: ", false_pos_rate)
+    false_pos_rate, true_pos_rate, thresholds = roc_curve(np.argmax(Y_test, axis=1),
+                                                          Y_predict[:,1])
     roc_auc = auc(false_pos_rate, true_pos_rate)
-    print("roc_auc: ", roc_auc)
 
     auc_keras = roc_auc
     fpr_keras = false_pos_rate
@@ -447,8 +445,7 @@ def evaluate_model(
 
     f1 = f1_score(Y_test_int, Y_pred_int)
 
-    precision, recall, thresholds = precision_recall_curve(Y_test[:, 0], Y_predict[:, 0])
-    # print(thresholds)
+    precision, recall, thresholds = precision_recall_curve(np.argmax(Y_test, axis=1), Y_predict[:, 1])
     pr_auc = auc(recall, precision)
 
     pr_keras = pr_auc
