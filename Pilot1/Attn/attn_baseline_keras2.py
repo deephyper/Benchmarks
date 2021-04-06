@@ -305,7 +305,7 @@ def run(params):
         metrics=[
             "acc",
             tf.keras.metrics.AUC(name="auroc", curve="ROC"),
-            tf.keras.metrics.AUC(name="auprc", curve="PR"),
+            tf.keras.metrics.AUC(name="aucpr", curve="PR"),
         ],
     )
 
@@ -319,7 +319,7 @@ def run(params):
     )
     csv_logger = CSVLogger("{}/{}.training.log".format(params["save_path"], root_fname))
     reduce_lr = ReduceLROnPlateau(
-        monitor="val_auc",
+        monitor="val_auroc",
         factor=0.20,
         patience=40,
         verbose=1,
@@ -328,7 +328,7 @@ def run(params):
         cooldown=3,
         min_lr=0.000000001,
     )
-    early_stop = EarlyStopping(monitor="val_auc", patience=200, verbose=1, mode="auto")
+    early_stop = EarlyStopping(monitor="val_auroc", patience=200, verbose=1, mode="auto")
     candle_monitor = candle.CandleRemoteMonitor(params=params)
 
     candle_monitor = candle.CandleRemoteMonitor(params=params)
@@ -367,8 +367,10 @@ def run(params):
         candle.plot_history(params["save_path"] + root_fname, history, "loss")
     if "acc" in history.history.keys():
         candle.plot_history(params["save_path"] + root_fname, history, "acc")
-    if "auc" in history.history.keys():
-        candle.plot_history(params["save_path"] + root_fname, history, "auc")
+    if "auroc" in history.history.keys():
+        candle.plot_history(params["save_path"] + root_fname, history, "auroc")
+    if "auprc" in history.history.keys():
+        candle.plot_history(params["save_path"] + root_fname, history, "aucpr")
 
     # Evaluate model
     score = model.evaluate(X_test, Y_test, verbose=0)
@@ -451,7 +453,7 @@ def evaluate_model(
     precision_keras = precision
     recall_keras = recall
 
-    print("f1=%.3f auroc=%.3f aucpr=%.3f" % (f1, auc_keras, pr_keras))
+    print("Test: f1=%.3f auroc=%.3f aucpr=%.3f" % (f1, auc_keras, pr_keras))
     # Plot RF
     fname = params["save_path"] + root_fname + ".aurpr.pdf"
     print("creating figure at ", fname)
@@ -487,19 +489,20 @@ def evaluate_model(
         )
     )
 
-    print(sklearn.metrics.roc_auc_score(Y_test_int, Y_pred_int))
+    print("roc_auc: ", sklearn.metrics.roc_auc_score(Y_test_int, Y_pred_int))
 
-    print(sklearn.metrics.balanced_accuracy_score(Y_test_int, Y_pred_int))
+    print("Balanced accuracy score: ", sklearn.metrics.balanced_accuracy_score(Y_test_int, Y_pred_int))
 
     print(sklearn.metrics.classification_report(Y_test_int, Y_pred_int))
 
-    print(sklearn.metrics.confusion_matrix(Y_test_int, Y_pred_int))
+    # print(sklearn.metrics.confusion_matrix(Y_test_int, Y_pred_int))
 
-    print("score")
-    print(score)
+    print("score: ", score)
 
-    print("Test val_loss:", score[0])
+    print("Test loss:", score[0])
     print("Test accuracy:", score[1])
+    print("Test auroc:", score[2])
+    print("Test aucpr:", score[3])
 
 
 def save_and_test_saved_model(params, model, root_fname, X_train, X_test, Y_test):
