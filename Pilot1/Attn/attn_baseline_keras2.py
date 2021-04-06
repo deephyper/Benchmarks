@@ -428,6 +428,7 @@ def evaluate_model(
 
     false_pos_rate, true_pos_rate, thresholds = roc_curve(Y_test[:, 0], Y_predict[:, 0])
     # print(thresholds)
+    print("fpr: ", false_pos_rate)
     roc_auc = auc(false_pos_rate, true_pos_rate)
 
     auc_keras = roc_auc
