@@ -430,6 +430,7 @@ def evaluate_model(
     # print(thresholds)
     # print("fpr: ", false_pos_rate)
     roc_auc = auc(false_pos_rate, true_pos_rate)
+    print("roc_auc: ", roc_auc)
 
     auc_keras = roc_auc
     fpr_keras = false_pos_rate
