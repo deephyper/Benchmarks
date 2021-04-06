@@ -426,7 +426,7 @@ def evaluate_model(
         )
     f.close()
 
-    false_pos_rate, true_pos_rate, thresholds = roc_curve(Y_test[:, 1], Y_predict[:, 1])
+    false_pos_rate, true_pos_rate, thresholds = roc_curve(np.argmax(Y_test, axis=1), np.argmax(Y_predict))
     # print(thresholds)
     # print("fpr: ", false_pos_rate)
     roc_auc = auc(false_pos_rate, true_pos_rate)
