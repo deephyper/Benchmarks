@@ -15,20 +15,20 @@ import pandas as pd
 
 from itertools import cycle, islice
 
-import keras
-from keras import backend as K
-from keras import optimizers
-from keras.models import Model
-from keras.layers import Input, Dense, Dropout
-from keras.callbacks import (
+import tensorflow.keras as keras
+from tensorflow.keras import backend as K
+from tensorflow.keras import optimizers
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Dense, Dropout
+from tensorflow.keras.callbacks import (
     Callback,
     ModelCheckpoint,
     ReduceLROnPlateau,
     LearningRateScheduler,
     TensorBoard,
 )
-from keras.utils import get_custom_objects
-from keras.utils.vis_utils import plot_model
+from tensorflow.keras.utils import get_custom_objects
+from tensorflow.keras.utils import plot_model
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 from sklearn.model_selection import KFold, StratifiedKFold, GroupKFold
 from scipy.stats.stats import pearsonr
